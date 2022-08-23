@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import ActorGrid from '../components/actor/ActorGrid';
 import { MainPageLayout } from '../components/MainPageLayout';
 import ShowGrid from '../components/show/ShowGrid';
 import { apiGet } from '../misc/config';
-import {useLastQuery} from '../misc/custom-hook';
+import {useLastQuery, useWhyDidYouUpdate} from '../misc/custom-hook';
 import {SearchInput, RadioInputsWrapper, SearchButtonWrapper} from './Home.styled'
 import CustomRadio from '../components/CustomRadio'
 
@@ -23,15 +23,21 @@ export const Home = () => {
     );
   };
 
-  const onInputChange = event => {
-    setInput(event.target.value);
-  };
+  const onInputChange = useCallback(
+    event => {
+      setInput(event.target.value);
+    }, [setInput]
+  )
 
-  const onKeyDown = e => {
-    if (e.keyCode === 13) {
-      onSearch();
+  
+
+  const onKeyDown = 
+    e => {
+      if (e.keyCode === 13) {
+        onSearch();
+      }
     }
-  };
+ 
 
   const renderResults = () => {
     if (results && results.length === 0) {
@@ -47,11 +53,18 @@ export const Home = () => {
     return null;
   };
 
-  const onRadioChange = event => {
-    setSearchOption(event.target.value);
-  };
+  const onRadioChange = useCallback(
+    event => {
+      setSearchOption(event.target.value);
+    }, []
+  )
 
   // console.log(searchOption);
+
+
+  useWhyDidYouUpdate('Home', {
+    onInputChange, onKeyDown
+  })
 
   return (
     <div>
